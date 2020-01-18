@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <title></title>
+
+  <body>
+
+    <h1 align='center'
+        style="color:#454545;
+               font-family: arial;">
+      Google Maps Example with Geolocation
+    </h1>
+
+    <div id="googleMap" style="width:100%;height:400px;"></div>
+
+    <!-- Function that sets the map properties and get the GeoLocation-->
+    <script>
+
+      function initMap() {
+        var mapProp = {
+          center: new google.maps.LatLng(35.6895000, 139.6917100),
+          zoom: 10,
+        };
+
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+        var infoWindow = new google.maps.InfoWindow({map: map});
+
+        // Get the current position
+        if (navigator.geolocation) {
+
+          navigator.geolocation.getCurrentPosition(
+
+            function(position) {
+              var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+
+              infoWindow.setPosition(pos);
+              infoWindow.setContent('You are here!');
+              map.setCenter(pos);
+            },
+
+            function() {
+              handleLocationError(true, infoWindow, map.getCenter());
+            }
+          );
+        }
+
+        else {
+          // If the browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: Geolocalisation failed, please reload the page and accept the browser request to access your localisation' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+    </script>
+
+    <!-- Go to https://developers.google.com/maps/documentation/javascript/get-api-key to get your Maps API KEY -->
+    <!-- And paste it instead of MY_API_KEY in the following url -->
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=MY_API_KEY&callback=initMap">
+    </script>
+
+  </body>
+
+</html>
